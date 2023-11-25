@@ -1,13 +1,20 @@
 import express from 'express';
+import bodyParser from 'body-parser';
 
-import { hello } from '@/routes/index.route';
+import indexRouter from '@/routes/index.route';
 
+const port = process.env.PORT || 3000;
 const app = express();
 
-app.get('/', (request, response) => {
-  response.json({ message: hello });
-});
+app.set('port', port);
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+// middlewares
+app.use(bodyParser.json());
+
+// routes
+app.use('/', indexRouter);
+
+// server listening
+app.listen(app.get('port'), () => {
+  console.log('Server is running on port', app.get('port'));
 });
