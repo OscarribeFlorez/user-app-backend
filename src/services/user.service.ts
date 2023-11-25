@@ -1,3 +1,5 @@
-export const createUserService = (): void => {
-  // crea el usuario en la base de datos
+import { UserModel, type User } from '@/models/user.model';
+
+export const createUserService = async (user: User): Promise<User> => {
+  return await UserModel.create(user);
 };

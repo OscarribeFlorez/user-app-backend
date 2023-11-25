@@ -2,13 +2,16 @@ import type { Request, Response } from 'express';
 
 import { createUserService } from '@/services/user.service';
 
-export const createUserController = (req: Request, res: Response): void => {
+export const createUserController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
   const user = req.body;
   try {
-    createUserService();
+    const createdUser = await createUserService(user);
     res.json({
       message: 'User created successfully!',
-      user
+      user: createdUser
     });
   } catch (error) {
     res.status(500).json({
