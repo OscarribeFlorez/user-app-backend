@@ -2,9 +2,13 @@ import type { Request, Response } from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
 
-import { createUserService } from '@/services/user.service';
+import {
+  createUserService,
+  getUsersService,
+  getOneUserService
+} from '@/services/user.service';
 
-const userSchema = Joi.object({
+const createUserSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required()
@@ -22,7 +26,7 @@ export const createUserController = async (
   const user = req.body;
 
   // validamos el body de la request
-  const { error } = userSchema.validate(user, {
+  const { error } = createUserSchema.validate(user, {
     abortEarly: false
   });
 
@@ -56,4 +60,65 @@ export const createUserController = async (
       error
     });
   }
+};
+
+export const getUsersController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const users = await getUsersService();
+    res.status(200).json({
+      message: 'Users fetched successfully!',
+      users
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Could not fetch users',
+      error
+    });
+  }
+};
+
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(6).required()
+}).messages({
+  'string.email': 'El campo email debe ser un email válido',
+  'string.min': 'El campo {{#label}} debe tener al menos 6 caracteres'
+});
+
+export const loginController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const loginData = req.body;
+
+  // validamos el body de la request
+  const { error } = loginSchema.validate(loginData, {
+    abortEarly: false
+  });
+
+  if (error) {
+    res.status(400).json({
+      message: 'Could not login',
+      error: error.details
+    });
+    return;
+  }
+
+  // obtenemos el usuario de la base de datos
+  const { email } = loginData;
+  const user = await getOneUserService({ email });
+
+  if (!user) {
+    res.status(404).json({
+      message: 'User not found'
+    });
+  }
+
+  res.json({
+    message: 'User logged in successfully!',
+    user
+  });
 };

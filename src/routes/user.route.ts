@@ -1,10 +1,17 @@
 import { Router } from 'express';
 
-import { createUserController } from '@/controllers/user.controller';
+import {
+  createUserController,
+  loginController,
+  getUsersController
+} from '@/controllers/user.controller';
 
 const userRouter = Router();
 
-// eslint-disable-next-line @typescript-eslint/no-misused-promises
 userRouter.post('/', createUserController);
+
+userRouter.get('/', getUsersController);
+
+userRouter.post('/login', loginController);
 
 export default userRouter;
