@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import Joi from 'joi';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 import {
   createUserService,
@@ -108,17 +109,40 @@ export const loginController = async (
   }
 
   // obtenemos el usuario de la base de datos
-  const { email } = loginData;
+  const { email, password } = loginData;
   const user = await getOneUserService({ email });
 
   if (!user) {
-    res.status(404).json({
-      message: 'User not found'
+    res.status(401).json({
+      message: 'Invalid credentials'
     });
+    return;
   }
+
+  // comparamos la contraseña
+  const comparedPassword = await bcrypt.compare(password, user.password);
+
+  if (!comparedPassword) {
+    res.status(401).json({
+      message: 'Invalid credentials'
+    });
+    return;
+  }
+
+  // generamos el token
+  const token = jwt.sign(
+    {
+      name: user.name,
+      email: user.email
+    },
+    process.env.JWT_API_SECRET || '',
+    {
+      expiresIn: '1h'
+    }
+  );
 
   res.json({
     message: 'User logged in successfully!',
-    user
+    accessToken: token
   });
 };
