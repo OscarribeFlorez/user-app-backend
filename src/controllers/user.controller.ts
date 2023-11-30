@@ -137,7 +137,7 @@ export const loginController = async (
     },
     process.env.JWT_API_SECRET || '',
     {
-      expiresIn: '30s'
+      expiresIn: '1d'
     }
   );
 
