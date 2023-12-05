@@ -135,7 +135,7 @@ export const loginController = async (
       name: user.name,
       email: user.email
     },
-    process.env.JWT_API_SECRET || '',
+    process.env.JMT_API_SECRET || '',
     {
       expiresIn: '30s'
     }

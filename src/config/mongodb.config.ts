@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const uri = process.env.MONGODB_API_KEY || '';
+const uri = process.env.MONGO_API_KEY || '';
 
 export const connectToMongoDB = async (): Promise<void> => {
   try {
