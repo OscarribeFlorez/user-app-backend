@@ -3,7 +3,8 @@ import { Router } from 'express';
 import {
   createUserController,
   loginController,
-  getUsersController
+  getUsersController,
+  getUserController
 } from '@/controllers/user.controller';
 import { authMiddleware } from '@/middlewares/auth.middleware';
 
@@ -14,6 +15,9 @@ userRouter.post('/', createUserController);
 
 // obtener usuarios
 userRouter.get('/', authMiddleware, getUsersController);
+
+// obtener un usuario
+userRouter.get('/:id', authMiddleware, getUserController);
 
 // login
 userRouter.post('/login', loginController);

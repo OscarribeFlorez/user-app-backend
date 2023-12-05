@@ -81,6 +81,26 @@ export const getUsersController = async (
   }
 };
 
+export const getUserController = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const user = await getOneUserService({ _id: id });
+    res.status(200).json({
+      message: 'User fetched successfully!',
+      user
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Could not fetch user',
+      error
+    });
+  }
+};
+
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(6).required()
@@ -137,7 +157,7 @@ export const loginController = async (
     },
     process.env.JMT_API_SECRET || '',
     {
-      expiresIn: '30s'
+      expiresIn: '1d'
     }
   );
 
