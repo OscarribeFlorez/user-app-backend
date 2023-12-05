@@ -1,6 +1,5 @@
 ###
 GET http://localhost:3000/api/v1/user HTTP/1.1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiRWZyYWluIFIuIiwiZW1haWwiOiJlZnJhaW5AZW1haWwuY29tIiwiaWF0IjoxNzAxMjIzMDM5LCJleHAiOjE3MDEyMjMwNjl9.H6C9DKbJCXlDVGEDfyT1LtmSq5nVLQmbtcIPEr9LuzM
 
 ###
 POST http://localhost:3000/api/v1/user HTTP/1.1
@@ -20,3 +19,6 @@ Content-Type: application/json
   "email": "efrain@email.com",
   "password": "efrain123"
 }
+
+###
+GET http://localhost:3000/api/v1/user/65693ce69ea981d62faa2d42 HTTP/1.1
